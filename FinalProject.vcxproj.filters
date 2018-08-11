@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="src\FpCamera.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InitShader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui.cpp">
+      <Filter>ssrc</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui_demo.cpp">
+      <Filter>ssrc</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui_draw.cpp">
+      <Filter>ssrc</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui_impl_glut.cpp">
+      <Filter>ssrc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\planet.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LoadTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Helper.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\FpCamera.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InitShader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui\imconfig.h">
+      <Filter>ssrc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui\imgui.h">
+      <Filter>ssrc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui\imgui_impl_glut.h">
+      <Filter>ssrc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui\imgui_internal.h">
+      <Filter>ssrc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui\stb_rect_pack.h">
+      <Filter>ssrc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui\stb_textedit.h">
+      <Filter>ssrc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\imgui\stb_truetype.h">
+      <Filter>ssrc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\planet.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LoadTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helper.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{0faa1d45-5516-44d9-9e88-11c63856cb97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{db79816c-d5fc-4d54-9e74-000cfaaf24fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ssrc">
+      <UniqueIdentifier>{6f0cc29c-1bcc-4cdb-b4bc-1a5b98814651}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\planet_fs.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\planet_tc.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\planet_te.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\planet_vs.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\01test_fs.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\01test_vs.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\atmosphere_fs.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\atmosphere_tc.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\atmosphere_te.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\atmosphere_vs.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\Ocean_fs.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\Ocean_tc.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\Ocean_te.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\Ocean_vs.glsl">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
