@@ -1,0 +1,89 @@
+﻿'Final_Project.exe' (Win32): Loaded 'G:\Purdue_Classes\2018Spring\CGT581_Geometry\FinalProject\FinalProject_Mid\Debug\Final_Project.exe'. Symbols loaded.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ntdll.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\kernel32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\KernelBase.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\user32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\win32u.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\gdi32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\gdi32full.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\msvcp_win.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ucrtbase.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\imm32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\combase.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\rpcrt4.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\sspicli.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\cryptbase.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\bcryptprimitives.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\sechost.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\opengl32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\msvcrt.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\advapi32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\msvcp140d.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'G:\Purdue_Classes\2018Spring\CGT581_Geometry\FinalProject\FinalProject_Mid\dll\glew32.dll'. Module was built without symbols.
+'Final_Project.exe' (Win32): Loaded 'G:\Purdue_Classes\2018Spring\CGT581_Geometry\FinalProject\FinalProject_Mid\dll\FreeImage.dll'. Module was built without symbols.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\vcruntime140d.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ws2_32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ucrtbased.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\SysWOW64\ucrtbased.dll'
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\glu32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'G:\Purdue_Classes\2018Spring\CGT581_Geometry\FinalProject\FinalProject_Mid\dll\freeglut.dll'. Module was built without symbols.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\winmm.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\winmmbase.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\winmmbase.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\winmmbase.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\SysWOW64\winmmbase.dll'
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\SysWOW64\winmmbase.dll'
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\cfgmgr32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ucrtbased.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\uxtheme.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\msctf.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\oleaut32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\dwmapi.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\System32\DriverStore\FileRepository\nvlt.inf_amd64_17dc65b1259eefc4\nvinit.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\version.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\System32\DriverStore\FileRepository\igdlh64.inf_amd64_2e329e8610bbb375\ig9icd32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\System32\DriverStore\FileRepository\igdlh64.inf_amd64_2e329e8610bbb375\ig9icd32.dll'
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\System32\DriverStore\FileRepository\igdlh64.inf_amd64_2e329e8610bbb375\ig9icd32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\shell32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\SHCore.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\windows.storage.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\shlwapi.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\kernel.appcore.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\powrprof.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\profapi.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\wtsapi32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\dxgi.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\SysWOW64\version.dll'
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\System32\DriverStore\FileRepository\nvlt.inf_amd64_17dc65b1259eefc4\nvinit.dll'
+The thread 0x6360 has exited with code 0 (0x0).
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ResourcePolicyClient.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\SysWOW64\ResourcePolicyClient.dll'
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ResourcePolicyClient.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\SysWOW64\ResourcePolicyClient.dll'
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\version.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\SysWOW64\version.dll'
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\System32\DriverStore\FileRepository\igdlh64.inf_amd64_2e329e8610bbb375\igc32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\TextInputFramework.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\CoreMessaging.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\CoreUIComponents.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\WinTypes.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ntmarta.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\WinTypes.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\SysWOW64\WinTypes.dll'
+'Final_Project.exe' (Win32): Loaded 'C:\Users\Hugh\AppData\Roaming\TaobaoProtect\TaobaoProtectSE.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\psapi.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ole32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\crypt32.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\msasn1.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\sfc.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\version.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Unloaded 'C:\Windows\SysWOW64\sfc.dll'
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\sfc.dll'. Cannot find or open the PDB file.
+'Final_Project.exe' (Win32): Loaded 'C:\Windows\SysWOW64\sfc_os.dll'. Cannot find or open the PDB file.
+The thread 0x5dbc has exited with code 0 (0x0).
+The thread 0x5bcc has exited with code 0 (0x0).
+The thread 0x5808 has exited with code 0 (0x0).
+The thread 0x6378 has exited with code 0 (0x0).
+The thread 0x50f4 has exited with code 0 (0x0).
+The thread 0x5dc0 has exited with code 0 (0x0).
+The program '[25020] Final_Project.exe' has exited with code 0 (0x0).

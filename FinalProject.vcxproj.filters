@@ -29,6 +29,9 @@
     <ClCompile Include="src\Helper.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\CreateSkybox.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\FpCamera.h">
@@ -65,6 +68,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Helper.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CreateSkybox.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PerlinNoise.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -120,6 +129,12 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="shaders\Ocean_vs.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\Skybox_fs.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\Skybox_vs.glsl">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

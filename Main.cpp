@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -21,6 +21,8 @@
 #include "FpCamera.h"
 #include "planet.h"
 #include "LoadTexture.h"
+#include "CreateSkybox.h"
+#include "PerlinNoise.h"
 
 #define BUFFER_OFFSET(i)  ((char*)NULL + (i))
 
@@ -51,12 +53,22 @@ static const std::string ocean_fs("shaders\\Ocean_fs.glsl");
 static const std::string t_vertex_shader("shaders\\01test_vs.glsl");
 static const std::string t_fragment_shader("shaders\\01test_fs.glsl");
 
-static const std::string earthTex("Textures\\Terrestrial1.png");
+static const std::string cosmos_Cube_vs("shaders\\Skybox_vs.glsl");
+static const std::string cosmos_Cube_fs("shaders\\Skybox_fs.glsl");
+
+
 static const std::string iceTex("Textures\\Icy.png");
 static const std::string rockTex("Textures\\Rock.png");
 static const std::string gasTex("Textures\\Gaseous2.png");
 static const std::string cloudTex("Textures\\Clouds1.png");
+static const std::string cosmosBoxTex("Textures\\CosmosTextures.png");
+static const std::string snowTex("Textures\\SnowTex.jpg");
+static const std::string grassTex("Textures\\Grass_Tex_01.jpg");
+static const std::string earthTex("Textures\\ground_text.jpg");
 GLuint planetTex_id[5] = { -1,-1,-1,-1,-1 };
+GLuint cosmosTexture_ID = -1;
+GLuint PerlinTex_ID = -1;
+GLuint earth_TexLayer[] = { -1,-1,-1 };
 
 
 //const std::string checkerFile("checker.png");
@@ -67,38 +79,32 @@ GLuint tex_id = -1;
 GLuint planet_sprogram = -1;
 GLuint atmosphere_sprogram = -1;
 GLuint ocean_sprogram = -1;
+GLuint cosmos_SkyProgram = -1;
 GLuint test_shader = -1;
 
-//VAO and VBO for the tessellated patch
-//GLuint patch_vao = -1;
-//GLuint patch_vbo = -1;
 
-//Number of terrain patches
-//const float patchX = 50.0f;
-//const float patchY = 50.0f;
-//const float patchScale = 10.0f;
-//const int numPatches = int(patchX*patchY);
 
-int win_width = 1280;
-int win_height = 720;
+int win_width = 1920;
+int win_height = 1080;
 
-float angle = 0;
+float angle = -0.8;
 bool isFill = false;
 bool isFract = true;
 bool isCalNorm = false;
 
 int randomSeed = 0;
 
+GLuint cosmos_vao = -1;
+
 PLANET PlanetBody;
 PLANET OceanLayer;
 PLANET AtmosphereLayer;
 
 
-
-const float aspect_ratio = float(win_width) / float(win_height);
-const float fov = 3.141592f / 4.0f;
+const double aspect_ratio = double(win_width) / double(win_height);
+const double fov = 3.141592 / 4.0;
 //Set up some uniform variables
-const glm::mat4 P = glm::perspective(fov, aspect_ratio, 0.1f, 1000.0f);
+const glm::dmat4 P = glm::perspective(fov, aspect_ratio, 0.001, 30.0);
 
 int generateRadomSeed()
 {
@@ -113,23 +119,34 @@ void draw_gui()
 
    ImGui::Begin("Control Panel", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
    const int n_sliders = 6;
-   static float slider[n_sliders] = { 1.0f,1.0f,1.0f,1.0f,1.0f,1.5f };
-   const std::string labels[n_sliders] = { "gl_TessLevelOuter[0]","gl_TessLevelOuter[1]","gl_TessLevelOuter[2]","gl_TessLevelOuter[3]","gl_TessLevelInner[0]", "gl_TessLevelInner[1]" };
+   static float slider[n_sliders] = { 1.0f,1.0f,1.0f,1.0f,0.97f,1.0f };
+   const std::string labels[n_sliders] = { "Terrain FactorX","Terrain FactorY","Terrain FactorZ","ColorBlending","AtmosHeight", "HeightCon" };
    for (int i = 0; i<n_sliders; i++)
    {
-      ImGui::SliderFloat(labels[i].c_str(), &slider[i], 0, 64);
+      ImGui::SliderFloat(labels[i].c_str(), &slider[i], -2, 3);
    }
    int slider_loc = glGetUniformLocation(planet_sprogram, "slider");
+   glUseProgram(ocean_sprogram);
    glUniform1fv(slider_loc, n_sliders, slider);
+
+   glUseProgram(planet_sprogram);
+  
+   glUniform1fv(slider_loc, n_sliders, slider);
+
+   glUseProgram(atmosphere_sprogram);
+   glUniform1fv(slider_loc, n_sliders, slider);
+
 
    ImGui::SliderFloat("testAngle", &angle, -5, 5);
 
-   ImGui::Checkbox("isRendering", &isFill);
+   ImGui::Checkbox("isWireFrame", &isFill);
 
    ImGui::Checkbox("isFractal", &isFract);
    ImGui::SameLine();
 
    ImGui::Checkbox("isCalNormal", &isCalNorm);
+
+   ImGui::Image((void*)PlanetBody.GetTex_ID().positionMap_ID, ImVec2(128.0f, 128.0f), ImVec2(0.0, 1.0), ImVec2(1.0, 0.0));
 
    ImGui::End();
 
@@ -143,99 +160,183 @@ void display()
 	int seed[2];
 	seed[0] = randomSeed / 10;
 	seed[1] = randomSeed - seed[0] * 10;
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   const int P_loc = 0;
-   const int V_loc = 1;
-   const int M_loc = 2;
-   const int isFract_loc = 4;
-   const int tex_loc = 5;
-   const int isCalNorm_loc = 6;
-   //glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-   glm::mat4 V = GetViewMatrix();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    const int P_loc = 0;
+    const int V_loc = 1;
+    const int M_loc = 2;
+    const int PVM_loc = 3;
+
+	const int light_loc = 5;
+
+	const int camHigh_loc = 16;
+	const int camLow_loc = 17;
+    const int isFract_loc = 20;
+    const int isCalNorm_loc = 22;
+
+   //glm::dmat4 V = glm::lookAt(glm::dvec3(0.0, 0.0, 2.5), glm::dvec3(0.0, 0.0, 0.0), glm::dvec3(0.0, 1.0, 0.0));
+    glm::dmat4 V = GetViewMatrix();
    //glm::mat4 M = glm::scale(glm::vec3(patchScale));
-   glm::mat4 M = glm::rotate(angle, glm::vec3(0.0f, 1.0f, 0.0f));
+    //glm::dmat4 M = glm::rotate(double(angle), glm::dvec3(0.0, 1.0, 0.0));
+	glm::dmat4 M = glm::dmat4(1.0);
 
-   glm::vec3 camModel = glm::vec3(glm::inverse(M)*glm::vec4(GetCameraPosition(),1.0f));
-   PlanetBody.planetBaseMesh(camModel, 2.0);
-   if (seed[0] < 8)
-   {
-	   glUseProgram(planet_sprogram);
-	   glUniformMatrix4fv(P_loc, 1, false, glm::value_ptr(P));
-	   glUniformMatrix4fv(V_loc, 1, false, glm::value_ptr(V));
-	   glUniformMatrix4fv(M_loc, 1, false, glm::value_ptr(M));
-
-	   glActiveTexture(GL_TEXTURE0);
-	   if (seed[0] < 3)
-	   {
-		   glBindTexture(GL_TEXTURE_2D, planetTex_id[earth]);
-	   }
-	   else if (seed[0] < 6 &&seed[0] >= 3)
-	   {
-		   glBindTexture(GL_TEXTURE_2D, planetTex_id[ice]);
-	   }
-	   else if (seed[0] < 8 && seed[0] >= 6)
-	   {
-		   glBindTexture(GL_TEXTURE_2D, planetTex_id[rock]);
-	   }
-	   glUniform1i(tex_loc, 0);
-
-	   glUniform1i(isFract_loc, static_cast <int>(isFract));
-
-	   glUniform1i(isCalNorm_loc, static_cast <int>(isCalNorm));
-
-	   glEnable(GL_CULL_FACE);
-	   glCullFace(GL_BACK);
-
-	   if (isFill)
-		   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Draw wireframe so we can see the edges of generated triangles
-
-	   PlanetBody.drawPlanet();
-
-   }
-  
-   if (seed[0] < 3)
-   {
-	   glUseProgram(ocean_sprogram);
-	   glUniformMatrix4fv(P_loc, 1, false, glm::value_ptr(P));
-	   glUniformMatrix4fv(V_loc, 1, false, glm::value_ptr(V));
-	   glUniformMatrix4fv(M_loc, 1, false, glm::value_ptr(M));
-
-	   if (isFill)
-		   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Draw wireframe so we can see the edges of generated triangles
-
-	   OceanLayer.drawPlanet();
-   }
+	glm::dvec3 camPos = GetCameraPosition();
+    glm::dvec3 camModel = glm::dvec3(glm::inverse(M)*glm::dvec4(camPos,1.0f));
+	glm::vec3 camHigh, camLow;
+	DoubletoTwoFloats(camPos, camHigh, camLow);
    
-   if (seed[0] >= 8)
-   {
-	   glUseProgram(atmosphere_sprogram);
-	   glUniformMatrix4fv(P_loc, 1, false, glm::value_ptr(P));
-	   glUniformMatrix4fv(V_loc, 1, false, glm::value_ptr(V));
-	   glUniformMatrix4fv(M_loc, 1, false, glm::value_ptr(M));
+    PlanetBody.planetBaseMesh(camModel, camPos, 4.0);
 
-	   glActiveTexture(GL_TEXTURE0);
-	  /* if (seed[1] < 3)
-	   {
-		   glBindTexture(GL_TEXTURE_2D, planetTex_id[cloud]);
-	   }*/
-	   
-		glBindTexture(GL_TEXTURE_2D, planetTex_id[gas]);
-	   
-	   glUniform1i(tex_loc, 0);
+    glm::dmat4 modelView = V*M;
+    modelView[3] = glm::dvec4(0.0, 0.0, 0.0, 1.0);
+	glm::dmat4 PVM_Mat = P*modelView;
 
-	   if (isFill)
-		   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Draw wireframe so we can see the edges of generated triangles
+	glm::vec3 light_Dir = glm::vec3(glm::rotate(double(angle), glm::dvec3(0.0, 1.0, 0.0)) * glm::vec4(0.0, 1.0, 1.0,0.0));
+	//glm::vec3 light_Dir =  glm::vec4(0.0, 1.0, 1.0, 0.0);
 
-	   glDisable(GL_CULL_FACE);
-	   //glEnable(GL_BLEND);
-	  // glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
-	   AtmosphereLayer.drawPlanet();
-	   //glDisable(GL_BLEND);
-   }
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	glm::dmat4 PVM_Cosmos = V*glm::scale(glm::dvec3(10.0));
+	PVM_Cosmos[3] = glm::dvec4(0.0, 0.0, 0.0, 1.0);
+	PVM_Cosmos = P*PVM_Cosmos;
+
+	glUseProgram(cosmos_SkyProgram);
+	glUniformMatrix4fv(PVM_loc, 1, false, glm::value_ptr(glm::mat4(PVM_Cosmos)));
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cosmosTexture_ID);
+	GLuint cosmosTexture_loc = glGetUniformLocation(cosmos_SkyProgram,"cubemap");
+	if (cosmosTexture_loc != -1)
+	{
+		glUniform1i(cosmosTexture_loc, 0);
+	}
+	glFrontFace(GL_CW);
+	DrawSkybox(cosmos_vao);
+	glFrontFace(GL_CCW);
+	
+
+
+	glUseProgram(planet_sprogram);
+	glUniformMatrix4fv(P_loc, 1, false, glm::value_ptr(glm::mat4(P)));
+	glUniformMatrix4fv(V_loc, 1, false, glm::value_ptr(glm::mat4(V)));
+	glUniformMatrix4fv(M_loc, 1, false, glm::value_ptr(glm::mat4(M)));
+	glUniformMatrix4fv(PVM_loc, 1, false, glm::value_ptr(glm::mat4(PVM_Mat)));
+
+	const int tex_loc = 21;
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, PerlinTex_ID);
+	glUniform1i(tex_loc, 0);
+	//else if (seed[0] < 6 &&seed[0] >= 3)
+	//{
+	//	glBindTexture(GL_TEXTURE_2D, planetTex_id[ice]);
+	//}
+	//else if (seed[0] < 8 && seed[0] >= 6)
+	//{
+	//	glBindTexture(GL_TEXTURE_2D, planetTex_id[rock]);
+	//}
+	
+	
+	const int earth_loc = 24;
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, earth_TexLayer[0]);
+	glUniform1i(earth_loc,1);
+
+	const int snow_loc = 25;
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, earth_TexLayer[1]);
+	glUniform1i(snow_loc, 2);
+
+	const int grass_loc = 26;
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, earth_TexLayer[2]);
+	glUniform1i(grass_loc, 3);
+
+	glUniform1i(isFract_loc, static_cast <int>(isFract));
+
+	glUniform1i(isCalNorm_loc, static_cast <int>(isCalNorm));
+
+	glUniform3f(camHigh_loc, camHigh[0], camHigh[1], camHigh[2]);
+	glUniform3f(camLow_loc, camLow[0], camLow[1], camLow[2]);
+	glUniform3f(light_loc, light_Dir[0], light_Dir[1], light_Dir[2]);
+
+	if (isFill)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Draw wireframe so we can see the edges of generated triangles
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	PlanetBody.drawPlanet();
+
+	
+
+
+	//Draw Ocean
+	glUseProgram(ocean_sprogram);
+	glUniformMatrix4fv(P_loc, 1, false, glm::value_ptr(glm::mat4(P)));
+	glUniformMatrix4fv(V_loc, 1, false, glm::value_ptr(glm::mat4(V)));
+	glUniformMatrix4fv(M_loc, 1, false, glm::value_ptr(glm::mat4(M)));
+	glUniformMatrix4fv(PVM_loc, 1, false, glm::value_ptr(glm::mat4(PVM_Mat)));
+	glUniform3f(light_loc, light_Dir[0], light_Dir[1], light_Dir[2]);
+
+
+	if (isFill)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Draw wireframe so we can see the edges of generated triangles
+	if (!isFill&&!isCalNorm)
+		OceanLayer.drawPlanet();
+
+	//Draw Atmosphere
+	int pass_loc = 6;
+    glUseProgram(atmosphere_sprogram);
+    glUniformMatrix4fv(P_loc, 1, false, glm::value_ptr(glm::mat4(P)));
+    glUniformMatrix4fv(V_loc, 1, false, glm::value_ptr(glm::mat4(V)));
+    glUniformMatrix4fv(M_loc, 1, false, glm::value_ptr(glm::mat4(M)));
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, planetTex_id[cloud]);
+	glUniform1i(tex_loc, 0);
+	glEnable(GL_BLEND);
+	//glDisable(GL_CULL_FACE);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glUniform1i(pass_loc, 0);
+	if (!isFill && !isCalNorm)
+		AtmosphereLayer.drawPlanet();
+	
+
+	glCullFace(GL_FRONT);
+	glUniform1i(pass_loc, 1);
+	if (!isFill && !isCalNorm)
+		AtmosphereLayer.drawPlanet();
+
+	glDisable(GL_BLEND);
+  // if (seed[0] >= 8)
+  // {
+	 //  glUseProgram(atmosphere_sprogram);
+	 //  glUniformMatrix4fv(P_loc, 1, false, glm::value_ptr(P));
+	 //  glUniformMatrix4fv(V_loc, 1, false, glm::value_ptr(V));
+	 //  glUniformMatrix4fv(M_loc, 1, false, glm::value_ptr(M));
+
+	 //  glActiveTexture(GL_TEXTURE0);
+	 // /* if (seed[1] < 3)
+	 //  {
+		//   glBindTexture(GL_TEXTURE_2D, planetTex_id[cloud]);
+	 //  }*/
+	 //  
+		//glBindTexture(GL_TEXTURE_2D, planetTex_id[gas]);
+	 //  
+	 //  glUniform1i(tex_loc, 0);
+
+	 //  if (isFill)
+		//   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Draw wireframe so we can see the edges of generated triangles
+
+	 //  glDisable(GL_CULL_FACE);
+
+	 //  AtmosphereLayer.drawPlanet();
+
+  // }
    
 
-   glUseProgram(planet_sprogram);
-   glUniform1f(7, float(seed[1]));
+  // glUseProgram(planet_sprogram);
+  // glUniform1f(7, float(seed[1]));
    //OceanLayer.drawPlanet();
 
    //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -245,9 +346,9 @@ void display()
    //glUniformMatrix4fv(M_loc, 1, false, glm::value_ptr(M));
    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
    //myTest.drawPlanet();
-   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
    //myTest.drawPlanet();
-
+   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
    draw_gui();
 
    glutSwapBuffers();
@@ -259,9 +360,11 @@ void idle()
 
    const int time_ms = glutGet(GLUT_ELAPSED_TIME);
    float time_sec = 0.001f*time_ms;
-
+   const int time_loc = 8;
    glUseProgram(atmosphere_sprogram);
-   const int time_loc = 3;
+   glUniform1f(time_loc, time_sec);
+
+   glUseProgram(ocean_sprogram);
    glUniform1f(time_loc, time_sec);
 
 }
@@ -271,8 +374,10 @@ void reload_shader()
    //Use the version of InitShader with 4 parameters. The shader names are in the order the stage are in the pipeline:
    //Vertex shader, Tess. control, Tess. evaluation, fragment shader
    GLuint new_shader = InitShader(planet_vs.c_str(), planet_tc.c_str(), planet_te.c_str(), planet_fs.c_str());
+   GLuint new_shader01 = InitShader(ocean_vs.c_str(), ocean_tc.c_str(), ocean_te.c_str(), ocean_fs.c_str());
+   GLuint new_shader02 = InitShader(atmosphere_vs.c_str(), atmosphere_tc.c_str(), atmosphere_te.c_str(), atmosphere_fs.c_str());
 
-   if (new_shader == -1) // loading failed
+   if (new_shader == -1 && new_shader01 == -1) // loading failed
    {
       glClearColor(1.0f, 0.0f, 1.0f, 0.0f);
    }
@@ -283,9 +388,12 @@ void reload_shader()
       if (planet_sprogram != -1)
       {
          glDeleteProgram(planet_sprogram);
+		 glDeleteProgram(ocean_sprogram);
+		 glDeleteProgram(atmosphere_sprogram);
       }
 	  planet_sprogram = new_shader;
-
+	  ocean_sprogram = new_shader01;
+	  atmosphere_sprogram = new_shader02;
    }
 }
 
@@ -314,8 +422,9 @@ void initOpenGl()
    glEnable(GL_DEPTH_TEST);
 
    test_shader = InitShader(t_vertex_shader.c_str(), t_fragment_shader.c_str());
-   ocean_sprogram = InitShader(ocean_vs.c_str(), ocean_tc.c_str(), ocean_te.c_str(), ocean_fs.c_str());
+   //ocean_sprogram = 
    atmosphere_sprogram = InitShader(atmosphere_vs.c_str(), atmosphere_tc.c_str(), atmosphere_te.c_str(), atmosphere_fs.c_str());
+   cosmos_SkyProgram = InitShader(cosmos_Cube_vs.c_str(), cosmos_Cube_fs.c_str());
 
    tex_id = LoadTexture(checkerFile.c_str());
    planetTex_id[earth] = LoadTexture(earthTex.c_str());
@@ -323,6 +432,11 @@ void initOpenGl()
    planetTex_id[rock] = LoadTexture(rockTex.c_str());
    planetTex_id[gas] = LoadTexture(gasTex.c_str());
    planetTex_id[cloud] = LoadTexture(cloudTex.c_str());
+   cosmosTexture_ID = LoadSkyTexture(cosmosBoxTex.c_str());
+
+   earth_TexLayer[0] = LoadTexture(earthTex.c_str());
+   earth_TexLayer[1] = LoadTexture(snowTex.c_str());
+   earth_TexLayer[2] = LoadTexture(grassTex.c_str());
 
    reload_shader();
 
@@ -355,11 +469,17 @@ void initOpenGl()
    //   glVertexAttribPointer(pos_loc, 3, GL_FLOAT, false, 0, BUFFER_OFFSET(0));
    //}
 
-   
+   glm::dvec3 eyePos = GetCameraPosition();
    //3.14159265f/2.0f
-   InitCamera(glm::vec3(0.0f, 0.0f, 3.5f),glm::vec3(0.0f,0.0f,0.0f));
-   OceanLayer.planetBaseMesh(GetCameraPosition(),1.0f);
-   AtmosphereLayer.planetBaseMesh(GetCameraPosition(), 1.0f);
+   InitCamera(glm::dvec3(0.0, 0.0, 3.5),glm::dvec3(0.0,0.0,0.0));
+   OceanLayer.planetBaseMesh(GetCameraPosition(), eyePos, 1.0f);
+   AtmosphereLayer.planetBaseMesh(GetCameraPosition(), eyePos, 1.0f);
+
+   cosmos_vao = createSkyBox();
+
+   PerlinTex_ID = PerlinNoise <double>::GetPermutationTexture();
+
+   PlanetBody.CreatePlanetFBO();
 }
 
 // glut keyboard callback function.

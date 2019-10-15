@@ -86,6 +86,7 @@
     <ClCompile Include="include\imgui\imgui_draw.cpp" />
     <ClCompile Include="include\imgui\imgui_impl_glut.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="src\CreateSkybox.cpp" />
     <ClCompile Include="src\FpCamera.cpp" />
     <ClCompile Include="src\Helper.cpp" />
     <ClCompile Include="src\InitShader.cpp" />
@@ -100,10 +101,12 @@
     <ClInclude Include="include\imgui\stb_rect_pack.h" />
     <ClInclude Include="include\imgui\stb_textedit.h" />
     <ClInclude Include="include\imgui\stb_truetype.h" />
+    <ClInclude Include="src\CreateSkybox.h" />
     <ClInclude Include="src\FpCamera.h" />
     <ClInclude Include="src\Helper.h" />
     <ClInclude Include="src\InitShader.h" />
     <ClInclude Include="src\LoadTexture.h" />
+    <ClInclude Include="src\PerlinNoise.h" />
     <ClInclude Include="src\planet.h" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +124,8 @@
     <None Include="shaders\planet_tc.glsl" />
     <None Include="shaders\planet_te.glsl" />
     <None Include="shaders\planet_vs.glsl" />
+    <None Include="shaders\Skybox_fs.glsl" />
+    <None Include="shaders\Skybox_vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
